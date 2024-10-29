@@ -5,12 +5,9 @@ const generateToken = require("../Config/generateToken");
 
 // Login
 const loginController = expressAsyncHandler(async (req, res) => {
-  console.log(req.body);
   const { name, password } = req.body;
   const user = await UserModel.findOne({ name });
 
-  console.log("Featched user data");
-  console.log(await user.matchPassword(password));
   if (user && (await user.matchPassword(password))) {
     const response = {
       _id: user._id,
@@ -19,11 +16,9 @@ const loginController = expressAsyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
     };
-    console.log(response);
     res.json(response);
   } else {
-    res.send(401);
-    throw new Error("Invalid UserName or Password");
+    res.status(401).send({ message: "Invalid Username or Password" });
   }
 });
 
@@ -31,26 +26,28 @@ const loginController = expressAsyncHandler(async (req, res) => {
 const registerController = expressAsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  //   check for all fields
+  // Check for all fields
   if (!name || !email || !password) {
-    res.send(400);
-    throw Error("All fields are required");
+    res.status(400).send({ message: "All fields are required" });
+    return;
   }
 
-  //   pre-existing user
+  // Check for pre-existing user
   const userExist = await UserModel.findOne({ email });
   if (userExist) {
-    throw new Error("User already exists");
+    res.status(400).send({ message: "User already exists" });
+    return;
   }
 
-  //   username already taken
+  // Check for username availability
   const userNameExist = await UserModel.findOne({ name });
   if (userNameExist) {
-    throw new Error("Username already taken");
+    res.status(400).send({ message: "Username already taken" });
+    return;
   }
 
-  //   create an entry in the database
-  const user = UserModel.create({ name, email, password });
+  // Create an entry in the database
+  const user = await UserModel.create({ name, email, password });
   if (user) {
     res.status(201).json({
       _id: user._id,
@@ -60,11 +57,11 @@ const registerController = expressAsyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400);
-    throw new Error("Registration Error");
+    res.status(400).send({ message: "Registration Error" });
   }
 });
 
+// Fetch all users excluding the current user
 const fetchAllUsersController = expressAsyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {
@@ -78,7 +75,7 @@ const fetchAllUsersController = expressAsyncHandler(async (req, res) => {
   const users = await UserModel.find(keyword).find({
     _id: { $ne: req.user._id },
   });
-  res.send(users);
+  res.json(users);
 });
 
 module.exports = {

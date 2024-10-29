@@ -10,7 +10,7 @@ const accessChat = asyncHandler(async (req, res) => {
     return res.sendStatus(400);
   }
 
-  var isChat = await Chat.find({
+  let isChat = await Chat.find({
     isGroupChat: false,
     $and: [
       { users: { $elemMatch: { $eq: req.user._id } } },
@@ -28,7 +28,7 @@ const accessChat = asyncHandler(async (req, res) => {
   if (isChat.length > 0) {
     res.send(isChat[0]);
   } else {
-    var chatData = {
+    const chatData = {
       chatName: "sender",
       isGroupChat: false,
       users: [req.user._id, userId],
@@ -48,6 +48,7 @@ const accessChat = asyncHandler(async (req, res) => {
   }
 });
 
+// Fetch chats for a user
 const fetchChats = asyncHandler(async (req, res) => {
   try {
     console.log("Fetch Chats aPI : ", req);
@@ -69,6 +70,7 @@ const fetchChats = asyncHandler(async (req, res) => {
   }
 });
 
+// Fetch all froups
 const fetchGroups = asyncHandler(async (req, res) => {
   try {
     const allGroups = await Chat.where("isGroupChat").equals(true);
@@ -84,9 +86,9 @@ const createGroupChat = asyncHandler(async (req, res) => {
     return res.status(400).send({ message: "Data is insufficient" });
   }
 
-  var users = JSON.parse(req.body.users);
+  let users = JSON.parse(req.body.users);
   console.log("chatController/createGroups : ", req);
-  users.push(req.user);
+  users.push(req.user._ids);
 
   try {
     const groupChat = await Chat.create({
