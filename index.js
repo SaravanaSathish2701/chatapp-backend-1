@@ -10,9 +10,9 @@ dotenv.config();
 
 app.use(express.json());
 
-const userRoutes = require("./routes/userRoutes");
-const chatRoutes = require("./routes/chatRoutes");
-const messageRoutes = require("./routes/messageRoutes");
+const userRoutes = require("./Routes/userRoutes");
+const chatRoutes = require("./Routes/chatRoutes");
+const messageRoutes = require("./Routes/messageRoutes");
 
 app.use(cors({ origin: "http://localhost:5173" }));
 
