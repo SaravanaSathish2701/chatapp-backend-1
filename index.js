@@ -10,11 +10,12 @@ dotenv.config();
 
 app.use(express.json());
 
+// CORS configuration to allow your frontend
+app.use(cors({ origin: "https://chatapp-frontend27.netlify.app" }));
+
 const userRoutes = require("./Routes/userRoutes");
 const chatRoutes = require("./Routes/chatRoutes");
 const messageRoutes = require("./Routes/messageRoutes");
-
-app.use(cors({ origin: "http://localhost:5173" }));
 
 const connectDb = async () => {
   try {
@@ -32,11 +33,12 @@ app.get("/", (req, res) => {
   res.send("API is Running.");
 });
 
+// Use routes
 app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
 app.use("/message", messageRoutes);
 
-// Error handling
+// Error handling middleware
 app.use(notFound);
 app.use(errorHandler);
 
@@ -45,9 +47,10 @@ const server = app.listen(PORT, () => {
   console.log(`Server is Running on port ${PORT}...`);
 });
 
+// Socket.io configuration
 const io = require("socket.io")(server, {
   cors: {
-    origin: "*",
+    origin: "https://chatapp-frontend27.netlify.app",
   },
   pingTimeout: 60000,
 });
@@ -63,12 +66,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new message", (newMessageStatus) => {
-    var chat = newMessageStatus.chat;
+    const chat = newMessageStatus.chat;
     if (!chat.users) {
       return console.log("chat.users not defined");
     }
     chat.users.forEach((user) => {
-      if (user._id == newMessageStatus.sender._id) return;
+      if (user._id === newMessageStatus.sender._id) return;
 
       socket.in(user._id).emit("message received", newMessageStatus);
     });
