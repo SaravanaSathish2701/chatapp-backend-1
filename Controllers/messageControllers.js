@@ -24,7 +24,7 @@ const sendMessage = expressAsyncHandler(async (req, res) => {
     return res.sendStatus(400);
   }
 
-  const  newMessage = {
+  const newMessage = {
     sender: req.user._id,
     content: content,
     chat: chatId,

@@ -3,9 +3,6 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
-const userRoutes = require("./Routes/userRoutes");
-const chatRoutes = require("./Routes/chatRoutes");
-const messageRoutes = require("./Routes/messageRoutes");
 
 const app = express();
 
@@ -15,6 +12,10 @@ app.use(express.json());
 
 // CORS configuration to allow your frontend
 app.use(cors({ origin: "https://chatapp-frontend27.netlify.app" }));
+
+const userRoutes = require("./Routes/userRoutes");
+const chatRoutes = require("./Routes/chatRoutes");
+const messageRoutes = require("./Routes/messageRoutes");
 
 const connectDb = async () => {
   try {

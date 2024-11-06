@@ -88,7 +88,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
 
   let users = JSON.parse(req.body.users);
   console.log("chatController/createGroups : ", req);
-  users.push(req.user._id);
+  users.push(req.user._ids);
 
   try {
     const groupChat = await Chat.create({
@@ -153,7 +153,7 @@ const addSelfToGroup = asyncHandler(async (req, res) => {
     res.send(404);
     throw new Error("Chat Not Found");
   } else {
-    res.json(added);
+    res.json(addeds);
   }
 });
 
