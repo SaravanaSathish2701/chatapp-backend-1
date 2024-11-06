@@ -14,7 +14,7 @@ dotenv.config();
 app.use(express.json());
 
 // CORS configuration to allow your frontend
-app.use(cors({ origin: "https://chatapp-frontend27.netlify.app" }));
+app.use(cors({ origin: "https://chatapp-frontend27.netlify.app/" }));
 
 const connectDb = async () => {
   try {
