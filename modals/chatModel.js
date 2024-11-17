@@ -10,7 +10,7 @@ const chatModel = mongoose.Schema(
         ref: "User",
       },
     ],
-    lastMessage: {
+    latestMessage: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Message",
     },
@@ -20,8 +20,7 @@ const chatModel = mongoose.Schema(
     },
   },
   {
-    timStamps: true,
-    strictPopulate: false,
+    timeStamp: true,
   }
 );
 
