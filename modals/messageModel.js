@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const messageModel = new mongoose.Schema(
+const messageModel = new mongoose.SchemaType(
   {
     sender: {
       type: mongoose.Schema.Types.ObjectId,
@@ -8,9 +8,12 @@ const messageModel = new mongoose.Schema(
       required: true,
     },
     content: { type: String, required: true },
-    chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat", required: true }, // Ensure this is defined
+    chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat", required: true },
   },
-  { timestamps: true }
+  {
+    timeStamp: true,
+    StrictPopulate: false,
+  }
 );
 
 const Message = mongoose.model("Message", messageModel);
