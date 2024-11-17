@@ -57,4 +57,4 @@ const sendMessage = expressAsyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allMessages, sendMessage }; F
+module.exports = { allMessages, sendMessage };
