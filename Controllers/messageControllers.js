@@ -1,7 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
-const Message = require("../modals/messageModel"); // Fixed typo in 'modals'
-const User = require("../modals/userModel");
+const Message = require("../modals/messageModel");
 const Chat = require("../modals/chatModel");
+const User = require("../modals/userModel");
 
 // Fetch All Messages for a Chat
 const allMessages = expressAsyncHandler(async (req, res) => {
@@ -10,7 +10,7 @@ const allMessages = expressAsyncHandler(async (req, res) => {
       .populate("sender", "name email") // Populate sender with name and email
       .populate({
         path: "chat",
-        select: "users", // Only populate specific fields if needed
+        select: "users", // Populate only specific fields if needed
         populate: { path: "users", select: "name email" },
       });
 
@@ -31,12 +31,13 @@ const sendMessage = expressAsyncHandler(async (req, res) => {
   }
 
   const newMessage = {
-    sender: req.user._id, // Ensure req.user is populated with the logged-in user
+    sender: req.user._id, // Ensure `req.user` is populated with the logged-in user
     content,
     chat: chatId,
   };
 
   try {
+    // Create the new message
     let message = await Message.create(newMessage);
 
     // Populate related fields after creation
