@@ -1,6 +1,24 @@
 const expressAsyncHandler = require("express-async-handler");
-const Message = require("../modals/messageModel");
+const User = require("../modals/userModel");
 const Chat = require("../modals/chatModel");
+
+// Fetch All Messages for a Chat
+// const allMessages = expressAsyncHandler(async (req, res) => {
+//   try {
+//     const messages = await Message.find({ chat: req.params.chatId })
+//       .populate("sender", "name email") // Populate sender with name and email
+//       .populate({
+//         path: "chat",
+//         select: "users", // Only populate specific fields if needed
+//         populate: { path: "users", select: "name email" },
+//       });
+
+//     res.json(messages);
+//   } catch (error) {
+//     console.error("Error fetching messages:", error.message);
+//     res.status(400).json({ message: error.message });
+//   }
+// });
 
 // Send a New Message
 const sendMessage = expressAsyncHandler(async (req, res) => {
@@ -12,17 +30,16 @@ const sendMessage = expressAsyncHandler(async (req, res) => {
   }
 
   const newMessage = {
-    sender: req.user._id, // Ensure `req.user` is populated with the logged-in user
+    sender: req.user._id, // Ensure req.user is populated with the logged-in user
     content,
     chat: chatId,
   };
 
   try {
-    // Create the new message
     let message = await Message.create(newMessage);
 
     // Populate related fields after creation
-    message = await message.populate("sender", "name email");
+    message = await message.populate("sender", "name pic");
     message = await message.populate({
       path: "chat",
       select: "users latestMessage",
@@ -39,4 +56,4 @@ const sendMessage = expressAsyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { sendMessage };
+module.exports = { allMessages, sendMessage };
