@@ -1,7 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const Message = require("../models/messageModel"); // Fixed typo in 'modals'
-const User = require("../models/userModel");
-const Chat = require("../models/chatModel");
+const User = require("../modals/userModel");
+const Chat = require("../modals/chatModel");
 
 // Fetch All Messages for a Chat
 const allMessages = expressAsyncHandler(async (req, res) => {
