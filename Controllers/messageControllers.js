@@ -1,4 +1,5 @@
 const expressAsyncHandler = require("express-async-handler");
+const Message = require("../modals/messageModel"); // Fixed typo in 'modals'
 const User = require("../modals/userModel");
 const Chat = require("../modals/chatModel");
 
